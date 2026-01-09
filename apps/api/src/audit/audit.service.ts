@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAuditLogDto, AuditQueryDto } from '@wedding/shared';
 
@@ -18,7 +19,7 @@ export class AuditService {
         action: dto.action as string,
         entityType: dto.entityType,
         entityId: dto.entityId,
-        metadata: dto.metadata ?? null,
+        metadata: dto.metadata ? (dto.metadata as Prisma.InputJsonValue) : Prisma.JsonNull,
       },
     });
   }
