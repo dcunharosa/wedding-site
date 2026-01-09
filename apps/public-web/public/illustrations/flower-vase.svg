@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Hand-drawn flower vase with flowers -->
+
+  <!-- Vase -->
+  <path d="M35 90 Q30 110 32 130 L68 130 Q70 110 65 90" />
+  <path d="M35 90 Q50 85 65 90" />
+
+  <!-- Stems -->
+  <path d="M42 90 Q40 70 38 50" />
+  <path d="M50 90 Q50 65 50 40" />
+  <path d="M58 90 Q60 70 62 45" />
+
+  <!-- Flower 1 (left) - daisy style -->
+  <circle cx="38" cy="45" r="5" />
+  <path d="M33 40 Q38 35 43 40" />
+  <path d="M33 50 Q38 55 43 50" />
+  <path d="M28 45 Q33 45 33 45" />
+  <path d="M43 45 Q48 45 48 45" />
+  <path d="M34 37 Q38 32 42 37" />
+  <path d="M34 53 Q38 58 42 53" />
+
+  <!-- Flower 2 (center) - larger bloom -->
+  <circle cx="50" cy="35" r="6" />
+  <path d="M44 28 Q50 22 56 28" />
+  <path d="M44 42 Q50 48 56 42" />
+  <path d="M38 35 Q42 35 44 35" />
+  <path d="M56 35 Q60 35 62 35" />
+  <path d="M45 25 Q50 20 55 25" />
+
+  <!-- Flower 3 (right) - tulip style -->
+  <path d="M58 45 Q62 35 66 45" />
+  <path d="M58 45 Q62 50 66 45" />
+  <path d="M60 38 Q62 32 64 38" />
+
+  <!-- Leaves -->
+  <path d="M45 75 Q35 70 40 60" />
+  <path d="M55 80 Q65 75 60 65" />
+
+  <!-- Small decorative leaves -->
+  <path d="M38 65 Q32 60 35 55" />
+  <path d="M62 60 Q68 55 65 50" />
+</svg>

@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs:*)",
+      "Bash(cd:*)",
+      "Bash(pnpm prisma db seed:*)",
+      "Bash(docker compose:*)",
+      "Bash(cat:*)",
+      "Bash(pnpm dev)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm add:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm prisma generate:*)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(pnpm prisma migrate dev:*)",
+      "Bash(pnpm db:seed:*)",
+      "Bash(pnpm prisma migrate reset:*)",
+      "Bash(lsof:*)",
+      "Bash(tree:*)"
+    ]
+  }
+}

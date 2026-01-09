@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 150" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Hand-drawn dancing figure with maracas like in Save the Date -->
+
+  <!-- Head -->
+  <circle cx="50" cy="20" r="10" />
+
+  <!-- Hair/hat suggestion -->
+  <path d="M42 12 Q50 5 58 12" />
+
+  <!-- Body -->
+  <path d="M50 30 L50 70" />
+
+  <!-- Arms raised with maracas -->
+  <!-- Left arm -->
+  <path d="M50 40 Q35 30 25 25" />
+  <!-- Left maraca -->
+  <ellipse cx="20" cy="20" rx="6" ry="8" transform="rotate(-30 20 20)" />
+  <path d="M25 25 L22 22" />
+
+  <!-- Right arm -->
+  <path d="M50 40 Q65 30 75 25" />
+  <!-- Right maraca -->
+  <ellipse cx="80" cy="20" rx="6" ry="8" transform="rotate(30 80 20)" />
+  <path d="M75 25 L78 22" />
+
+  <!-- Dress/skirt with movement -->
+  <path d="M50 70 Q30 90 25 120" />
+  <path d="M50 70 Q70 90 75 120" />
+  <path d="M50 70 Q45 95 40 120" />
+  <path d="M50 70 Q55 95 60 120" />
+
+  <!-- Legs with dance movement -->
+  <path d="M40 120 Q35 135 30 145" />
+  <path d="M60 120 Q70 130 80 140" />
+
+  <!-- Motion lines -->
+  <path d="M15 35 Q12 30 15 25" />
+  <path d="M85 35 Q88 30 85 25" />
+  <path d="M85 125 Q90 125 95 120" />
+</svg>

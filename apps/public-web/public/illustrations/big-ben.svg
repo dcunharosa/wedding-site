@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 200" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Hand-drawn Big Ben tower inspired by Save the Date -->
+  <!-- Spire -->
+  <path d="M40 5 L40 25" />
+  <path d="M38 25 L42 25" />
+
+  <!-- Top ornament -->
+  <path d="M35 28 Q40 22 45 28" />
+  <path d="M35 28 L35 35 L45 35 L45 28" />
+
+  <!-- Clock face area -->
+  <path d="M30 35 L30 70 L50 70 L50 35" />
+  <circle cx="40" cy="52" r="12" />
+  <!-- Clock hands -->
+  <path d="M40 52 L40 44" />
+  <path d="M40 52 L46 52" />
+
+  <!-- Middle section with details -->
+  <path d="M28 70 L28 110 L52 110 L52 70" />
+  <path d="M32 75 L32 85" />
+  <path d="M40 75 L40 85" />
+  <path d="M48 75 L48 85" />
+  <path d="M32 90 L32 105" />
+  <path d="M40 90 L40 105" />
+  <path d="M48 90 L48 105" />
+
+  <!-- Lower section -->
+  <path d="M25 110 L25 160 L55 160 L55 110" />
+  <path d="M30 115 L30 155" />
+  <path d="M37 115 L37 155" />
+  <path d="M43 115 L43 155" />
+  <path d="M50 115 L50 155" />
+
+  <!-- Base -->
+  <path d="M20 160 L20 190 L60 190 L60 160" />
+  <path d="M25 170 L25 185" />
+  <path d="M35 170 L35 185" />
+  <path d="M45 170 L45 185" />
+  <path d="M55 170 L55 185" />
+
+  <!-- Ground line -->
+  <path d="M15 190 Q40 195 65 190" />
+</svg>

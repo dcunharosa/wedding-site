@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 180" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Hand-drawn Cristo Redentor (Christ the Redeemer) - Rio de Janeiro -->
+
+  <!-- Head -->
+  <circle cx="50" cy="20" r="8" />
+
+  <!-- Neck -->
+  <path d="M50 28 L50 38" />
+
+  <!-- Arms stretched out -->
+  <path d="M50 45 L10 55" />
+  <path d="M50 45 L90 55" />
+
+  <!-- Hands -->
+  <path d="M10 55 L5 53 M10 55 L5 57 M10 55 L7 60" />
+  <path d="M90 55 L95 53 M90 55 L95 57 M90 55 L93 60" />
+
+  <!-- Robe body -->
+  <path d="M35 45 L35 140 Q35 155 50 155 Q65 155 65 140 L65 45" />
+
+  <!-- Robe folds -->
+  <path d="M42 60 L42 140" />
+  <path d="M50 50 L50 150" />
+  <path d="M58 60 L58 140" />
+
+  <!-- Base/pedestal -->
+  <path d="M30 155 L30 170 L70 170 L70 155" />
+  <path d="M25 170 L75 170" />
+
+  <!-- Mountain (Corcovado) suggestion -->
+  <path d="M20 175 Q50 160 80 175" />
+</svg>

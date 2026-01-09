@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Hand-drawn seagulls like in Save the Date -->
+
+  <!-- Bird 1 (larger, foreground) -->
+  <path d="M20 35 Q35 20 50 35" />
+  <path d="M50 35 Q65 20 80 35" />
+
+  <!-- Bird 2 (smaller, background) -->
+  <path d="M55 15 Q65 5 75 15" />
+  <path d="M75 15 Q85 5 95 15" />
+
+  <!-- Bird 3 (smallest, far) -->
+  <path d="M90 25 Q97 18 104 25" />
+  <path d="M104 25 Q111 18 118 25" />
+</svg>

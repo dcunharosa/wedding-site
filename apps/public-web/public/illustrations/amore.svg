@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Hand-drawn "amore" cursive text -->
+
+  <!-- a -->
+  <path d="M10 30 Q15 20 20 25 Q25 30 20 35 Q15 40 10 35 L20 35 Q25 35 28 30" />
+
+  <!-- m -->
+  <path d="M28 35 L28 25 Q32 20 36 25 L36 35 Q40 20 44 25 L44 35" />
+
+  <!-- o -->
+  <path d="M48 30 Q48 22 55 22 Q62 22 62 30 Q62 38 55 38 Q48 38 48 30" />
+
+  <!-- r -->
+  <path d="M66 35 L66 25 Q70 22 75 25" />
+
+  <!-- e -->
+  <path d="M78 28 L90 28 Q92 22 85 22 Q78 22 78 30 Q78 38 85 38 Q90 38 92 35" />
+
+  <!-- Small heart decoration -->
+  <path d="M70 12 Q72 7 75 12 Q78 7 80 12 Q80 17 75 22 Q70 17 70 12" />
+</svg>

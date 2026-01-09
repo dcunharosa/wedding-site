@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Hand-drawn music notes like in Save the Date -->
+
+  <!-- Note 1 - eighth note -->
+  <ellipse cx="20" cy="55" rx="8" ry="6" transform="rotate(-20 20 55)" />
+  <path d="M27 52 L27 20" />
+  <path d="M27 20 Q35 25 35 35" />
+
+  <!-- Note 2 - quarter note -->
+  <ellipse cx="50" cy="45" rx="7" ry="5" transform="rotate(-15 50 45)" fill="currentColor" />
+  <path d="M56 42 L56 15" />
+
+  <!-- Note 3 - double eighth notes -->
+  <ellipse cx="75" cy="60" rx="6" ry="4" transform="rotate(-20 75 60)" />
+  <path d="M80 58 L80 30" />
+  <ellipse cx="90" cy="55" rx="6" ry="4" transform="rotate(-20 90 55)" />
+  <path d="M95 53 L95 25" />
+  <path d="M80 30 L95 25" />
+
+  <!-- Decorative wavy lines suggesting sound -->
+  <path d="M15 25 Q18 22 21 25 Q24 28 27 25" />
+  <path d="M60 10 Q63 7 66 10 Q69 13 72 10" />
+</svg>

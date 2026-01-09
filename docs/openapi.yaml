@@ -1,0 +1,59 @@
+openapi: 3.1.0
+info:
+  title: Wedding Website API
+  version: 1.0.0
+  description: API for the production-ready wedding platform.
+
+paths:
+  /public/content:
+    get:
+      summary: Fetch public section content
+      parameters:
+        - name: keys
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "HOME_HERO,SCHEDULE"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+
+  /public/rsvp/household:
+    get:
+      summary: Fetch household for token
+      parameters:
+        - name: t
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+
+  /admin/auth/login:
+    post:
+      summary: Admin login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                password: { type: string }
+      responses:
+        '200':
+          description: OK
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

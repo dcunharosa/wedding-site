@@ -1,0 +1,195 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design tokens from guidelines */
+:root {
+  /* Neutrals */
+  --bg: #F6F2EA;        /* Linen */
+  --surface: #FFFFFF;   /* Cards */
+  --border: #E7DDCF;    /* Sand */
+  --text: #151C2D;      /* Ink */
+  --muted: #6F6A62;     /* Driftwood */
+
+  /* Accents */
+  --sky: #91B5E5;
+  --sky-tint: #F2F6FC;
+  --clay: #C77A57;
+
+  /* Radius */
+  --r-sm: 10px;
+  --r-md: 16px;
+
+  /* Spacing */
+  --s1: 8px;
+  --s2: 16px;
+  --s3: 24px;
+  --s4: 32px;
+  --s5: 48px;
+  --s6: 64px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply text-body leading-relaxed bg-linen text-ink;
+  }
+
+  /* Typography rules from guidelines */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif font-light;
+  }
+
+  h1 {
+    @apply text-display-lg md:text-display-xl uppercase tracking-wider;
+  }
+
+  h2 {
+    @apply text-display-sm md:text-display-md;
+  }
+
+  h3 {
+    @apply text-display-sm;
+  }
+
+  p {
+    @apply text-body-lg leading-relaxed;
+  }
+
+  /* Ensure body text is sentence case, not all caps */
+  p, li, span, a:not(.btn-primary):not(.btn-secondary) {
+    text-transform: none;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-content mx-auto px-6 md:px-8 lg:px-12;
+  }
+
+  .prose-custom {
+    @apply max-w-prose mx-auto;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24 lg:py-32;
+  }
+
+  /* Card component */
+  .card {
+    @apply bg-shell rounded-md p-6 md:p-8 border border-sand;
+  }
+
+  /* Primary button - from guidelines */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-8 py-4
+           bg-ink text-white font-medium rounded-md
+           hover:shadow-lg transition-all duration-300
+           focus:outline-none focus:ring-2 focus:ring-sky focus:ring-offset-2;
+  }
+
+  /* Secondary button - from guidelines */
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-8 py-4
+           border border-sand text-ink font-medium rounded-md
+           hover:bg-sky-tint12 transition-colors duration-300
+           focus:outline-none focus:ring-2 focus:ring-sky focus:ring-offset-2;
+  }
+
+  .link-underline {
+    @apply relative inline-block
+           after:absolute after:bottom-0 after:left-0 after:h-[1px]
+           after:w-0 after:bg-current after:transition-all after:duration-300
+           hover:after:w-full;
+  }
+
+  /* Eyebrow/label text */
+  .eyebrow {
+    @apply text-label uppercase tracking-wider text-driftwood;
+  }
+
+  /* At-a-glance chips */
+  .info-chip {
+    @apply bg-sky-tint12 rounded-md px-4 py-3 text-center;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-on-scroll {
+    @apply opacity-0 translate-y-8 transition-all duration-700;
+  }
+
+  .animate-on-scroll.in-view {
+    @apply opacity-100 translate-y-0;
+  }
+
+  /* Sky blue as accent - hairline separators */
+  .divider-sky {
+    @apply h-px bg-sky/20;
+  }
+
+  /* Grain texture overlay for atmospheric depth */
+  .grain-overlay {
+    position: relative;
+  }
+
+  .grain-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Staggered animation delays for reveals */
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+
+  /* Hover lift effect for cards */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-lift:hover {
+    @apply -translate-y-1 shadow-lg;
+  }
+
+  /* Subtle pulse for CTAs */
+  .pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-subtle {
+    0%, 100% { box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    50% { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  }
+}
+
+/* Custom scrollbar - more subtle */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-linen;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-sand rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-driftwood;
+}

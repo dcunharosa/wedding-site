@@ -1,0 +1,168 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-sand;
+  }
+
+  body {
+    @apply bg-linen text-ink antialiased;
+  }
+
+  h1, h2, h3 {
+    @apply font-serif font-light tracking-wide;
+  }
+
+  h1 {
+    @apply text-display-lg;
+  }
+
+  h2 {
+    @apply text-display-md;
+  }
+
+  h3 {
+    @apply text-display-sm;
+  }
+}
+
+@layer components {
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-all duration-200
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:ring-offset-2
+           disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-primary {
+    @apply btn bg-ink text-white hover:bg-ink/90 px-5 py-2.5 shadow-soft;
+  }
+
+  .btn-secondary {
+    @apply btn bg-shell text-ink border border-sand hover:bg-linen px-5 py-2.5;
+  }
+
+  .btn-destructive {
+    @apply btn bg-destructive text-white hover:bg-destructive/90 px-5 py-2.5;
+  }
+
+  .btn-ghost {
+    @apply btn text-driftwood hover:bg-sand/50 hover:text-ink px-4 py-2;
+  }
+
+  /* Form inputs */
+  .input {
+    @apply flex h-11 w-full rounded-md border border-sand bg-shell px-4 py-2 text-body
+           text-ink placeholder:text-driftwood/60
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky focus-visible:border-sky
+           disabled:cursor-not-allowed disabled:opacity-50 transition-colors;
+  }
+
+  .input:focus {
+    @apply border-sky;
+  }
+
+  /* Cards */
+  .card {
+    @apply rounded-lg border border-sand bg-shell shadow-card;
+  }
+
+  /* Labels */
+  .label {
+    @apply text-label font-medium text-driftwood uppercase tracking-wider;
+  }
+
+  /* Status badges */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge bg-success-light text-success border border-success/20;
+  }
+
+  .badge-warning {
+    @apply badge bg-warning-light text-warning border border-warning/20;
+  }
+
+  .badge-info {
+    @apply badge bg-sky-50 text-sky-600 border border-sky/20;
+  }
+
+  .badge-neutral {
+    @apply badge bg-linen text-driftwood border border-sand;
+  }
+
+  /* Stat cards */
+  .stat-card {
+    @apply card p-6 hover:shadow-soft transition-shadow;
+  }
+
+  .stat-value {
+    @apply text-3xl font-serif font-light text-ink;
+  }
+
+  .stat-label {
+    @apply text-sm text-driftwood mt-1;
+  }
+
+  /* Table styles */
+  .table-header {
+    @apply text-label uppercase text-driftwood bg-linen px-4 py-3;
+  }
+
+  .table-cell {
+    @apply px-4 py-4 text-body;
+  }
+
+  .table-row {
+    @apply border-b border-sand hover:bg-linen/50 transition-colors;
+  }
+
+  /* Links */
+  .link {
+    @apply text-sky hover:text-sky-600 transition-colors;
+  }
+
+  /* Utility classes */
+  .text-muted {
+    @apply text-driftwood;
+  }
+
+  .text-muted-foreground {
+    @apply text-driftwood;
+  }
+
+  /* Page header */
+  .page-header {
+    @apply mb-8;
+  }
+
+  .page-title {
+    @apply text-display-lg font-serif font-light text-ink;
+  }
+
+  .page-description {
+    @apply text-body-lg text-driftwood mt-2;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-linen;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-sand rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-driftwood/40;
+}
