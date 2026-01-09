@@ -1,0 +1,12 @@
+# Nixpacks configuration for Railway
+[phases.setup]
+nixPkgs = ["nodejs_18", "pnpm", "openssl"]
+
+[phases.install]
+cmds = ["cd ../.. && pnpm install --frozen-lockfile"]
+
+[phases.build]
+cmds = ["cd ../.. && pnpm --filter @wedding/database generate && pnpm --filter @wedding/api build"]
+
+[start]
+cmd = "node dist/main.js"
