@@ -17,7 +17,10 @@
       "Bash(pnpm db:seed:*)",
       "Bash(pnpm prisma migrate reset:*)",
       "Bash(lsof:*)",
-      "Bash(tree:*)"
+      "Bash(tree:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ]
   }
 }
