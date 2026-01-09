@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAuditLogDto, AuditQueryDto } from '@wedding/shared';
-import { ActorType, Prisma } from '@prisma/client';
 
 @Injectable()
 export class AuditService {
@@ -13,13 +12,13 @@ export class AuditService {
   async log(dto: CreateAuditLogDto) {
     return this.prisma.auditLog.create({
       data: {
-        actorType: dto.actorType as unknown as ActorType,
+        actorType: dto.actorType as 'ADMIN' | 'GUEST' | 'SYSTEM',
         actorAdminId: dto.actorAdminId || null,
         householdId: dto.householdId || null,
         action: dto.action as string,
         entityType: dto.entityType,
         entityId: dto.entityId,
-        metadata: dto.metadata as Prisma.InputJsonValue ?? Prisma.JsonNull,
+        metadata: dto.metadata ?? null,
       },
     });
   }

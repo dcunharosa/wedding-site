@@ -67,8 +67,8 @@ export class RsvpService {
     });
 
     // Build guests with current responses
-    const guests: GuestWithResponse[] = household.guests.map((guest) => {
-      const response = latestSubmission?.responses.find((r) => r.guestId === guest.id);
+    const guests: GuestWithResponse[] = household.guests.map((guest: any) => {
+      const response = latestSubmission?.responses.find((r: any) => r.guestId === guest.id);
 
       return {
         id: guest.id,
@@ -164,7 +164,7 @@ export class RsvpService {
     const household = await this.validateToken(token);
 
     // Validate all guest IDs belong to this household
-    const guestIds = new Set(household.guests.map((g) => g.id));
+    const guestIds = new Set(household.guests.map((g: any) => g.id));
     const invalidGuests = dto.responses.filter((r) => !guestIds.has(r.guestId));
     if (invalidGuests.length > 0) {
       throw new BadRequestException('Invalid guest IDs in responses');
@@ -172,7 +172,7 @@ export class RsvpService {
 
     // Enforce dependency rules
     const { corrected, responses } = this.enforceDependencyRules(
-      household.guests.map((g) => ({
+      household.guests.map((g: any) => ({
         id: g.id,
         attendanceRequiresGuestId: g.attendanceRequiresGuestId,
       })),

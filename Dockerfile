@@ -21,7 +21,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # Generate Prisma client
-RUN pnpm --filter @wedding/database generate
+RUN cd packages/database && pnpm prisma generate
 
 # Build the API
 RUN pnpm --filter @wedding/shared build

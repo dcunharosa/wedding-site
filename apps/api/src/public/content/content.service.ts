@@ -23,12 +23,10 @@ export class ContentService {
     });
 
     // Transform to key-value map
-    return content.reduce<Record<string, unknown>>(
-      (acc, item) => {
-        acc[item.key] = item.json;
-        return acc;
-      },
-      {},
-    );
+    const result: Record<string, unknown> = {};
+    for (const item of content) {
+      result[item.key] = item.json;
+    }
+    return result;
   }
 }
