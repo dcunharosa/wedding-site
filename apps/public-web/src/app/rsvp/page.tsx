@@ -20,9 +20,9 @@ export default function RsvpPage() {
       return;
     }
 
-    async function loadHousehold() {
+    async function loadHousehold(rsvpToken: string) {
       try {
-        const data = await getHouseholdRsvp(token);
+        const data = await getHouseholdRsvp(rsvpToken);
         setHousehold(data);
       } catch (err: any) {
         console.error('Error loading household:', err);
@@ -36,7 +36,7 @@ export default function RsvpPage() {
       }
     }
 
-    loadHousehold();
+    loadHousehold(token);
   }, [token]);
 
   if (loading) {
