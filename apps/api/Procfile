@@ -1,0 +1,1 @@
+web: cd ../.. && pnpm --filter @wedding/api start:prod
