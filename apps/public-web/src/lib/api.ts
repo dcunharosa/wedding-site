@@ -1,6 +1,15 @@
 // API client for the wedding site
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+function getApiUrl(): string {
+  const url = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+  // Ensure URL has protocol
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    return `https://${url}`;
+  }
+  return url;
+}
+
+const API_URL = getApiUrl();
 
 export class ApiError extends Error {
   constructor(
