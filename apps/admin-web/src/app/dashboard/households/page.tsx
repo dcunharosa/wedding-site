@@ -1,11 +1,19 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { DashboardLayout } from '../../../components/DashboardLayout';
 import { getHouseholds, createHousehold, deleteHousehold } from '../../../lib/api';
 
 export default function HouseholdsPage() {
+  return (
+    <Suspense fallback={<div className="p-12 text-center">Loading...</div>}>
+      <HouseholdsPageInner />
+    </Suspense>
+  );
+}
+
+function HouseholdsPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
