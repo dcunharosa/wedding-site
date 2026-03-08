@@ -44,7 +44,7 @@ async function bootstrap() {
     SwaggerModule.setup('api/docs', app, document);
   }
 
-  const port = process.env.API_PORT || 3001;
+  const port = process.env.PORT || process.env.API_PORT || 3001;
   // Listen on 0.0.0.0 so Railway (and other cloud hosts) can route traffic in
   await app.listen(port, '0.0.0.0');
 

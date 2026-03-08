@@ -9,4 +9,4 @@ cmds = ["pnpm install --frozen-lockfile"]
 cmds = ["pnpm --filter @wedding/database generate", "pnpm --filter @wedding/api build"]
 
 [start]
-cmd = "node apps/api/dist/main.js"
+cmd = "pnpm --filter @wedding/database exec prisma migrate deploy && node apps/api/dist/main.js"
