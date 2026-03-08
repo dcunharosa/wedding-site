@@ -3,6 +3,7 @@ import { createHash } from 'crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ConfigService } from '../../config/config.service';
 import { AuditService } from '../../audit/audit.service';
+import { EmailService } from '../../email/email.service';
 import { RsvpSubmitDto, ChangeRequestDto, HouseholdWithGuests, GuestWithResponse } from '@wedding/shared';
 
 @Injectable()
@@ -11,6 +12,7 @@ export class RsvpService {
     private prisma: PrismaService,
     private configService: ConfigService,
     private auditService: AuditService,
+    private emailService: EmailService,
   ) {}
 
   /**
@@ -239,6 +241,23 @@ export class RsvpService {
       },
     });
 
+    // Notify couple — fire and forget, never block the response
+    this.emailService
+      .notifyRsvpSubmitted({
+        householdName: household.displayName,
+        guests: responses.map((r) => {
+          const guest = household.guests.find((g: any) => g.id === r.guestId);
+          return {
+            name: guest ? `${guest.firstName} ${guest.lastName}` : r.guestId,
+            attending: r.attending,
+            dietary: r.dietaryRestrictions ?? null,
+          };
+        }),
+        songRequest: songRequestText ?? null,
+        submittedAt: submission.submittedAt.toISOString(),
+      })
+      .catch(() => {/* swallow — email failure must never break RSVP */});
+
     return {
       ok: true,
       submittedAt: submission.submittedAt.toISOString(),
@@ -278,8 +297,12 @@ export class RsvpService {
       },
     });
 
-    // TODO: Send notification email to couple
-    // This would be handled by an email service
+    this.emailService
+      .notifyChangeRequest({
+        householdName: household.displayName,
+        message: dto.message,
+      })
+      .catch(() => {/* swallow — email failure must never block the response */});
 
     return { ok: true };
   }

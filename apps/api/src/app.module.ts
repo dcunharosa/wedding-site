@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { PublicModule } from './public/public.module';
 import { AdminModule } from './admin/admin.module';
 import { AuditModule } from './audit/audit.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AuditModule } from './audit/audit.module';
     // Core modules
     PrismaModule,
     AuditModule,
+    EmailModule,
 
     // Feature modules
     AuthModule,

@@ -45,9 +45,10 @@ async function bootstrap() {
   }
 
   const port = process.env.API_PORT || 3001;
-  await app.listen(port);
+  // Listen on 0.0.0.0 so Railway (and other cloud hosts) can route traffic in
+  await app.listen(port, '0.0.0.0');
 
-  console.log(`🚀 API server running on http://localhost:${port}`);
+  console.log(`🚀 API server running on port ${port}`);
   console.log(`📚 API docs available at http://localhost:${port}/api/docs`);
 }
 
