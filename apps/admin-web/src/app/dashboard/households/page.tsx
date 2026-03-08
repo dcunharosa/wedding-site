@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { DashboardLayout } from '../../components/DashboardLayout';
-import { getHouseholds, createHousehold, deleteHousehold } from '../../lib/api';
+import { DashboardLayout } from '../../../components/DashboardLayout';
+import { getHouseholds, createHousehold, deleteHousehold } from '../../../lib/api';
 
 export default function HouseholdsPage() {
   const router = useRouter();
