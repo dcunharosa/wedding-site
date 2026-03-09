@@ -13,13 +13,18 @@ import {
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth()
 export class HouseholdsController {
-  constructor(private householdsService: HouseholdsService) {}
+  constructor(private householdsService: HouseholdsService) { }
 
   @Get()
   @ApiOperation({ summary: 'List all households' })
   @ApiResponse({ status: 200, description: 'Households returned' })
   async findAll(@Query() query: HouseholdQueryDto) {
-    return this.householdsService.findAll(query);
+    try {
+      return await this.householdsService.findAll(query);
+    } catch (error) {
+      console.error('Error in HouseholdsController.findAll:', error);
+      throw error;
+    }
   }
 
   @Get(':id')
@@ -35,6 +40,13 @@ export class HouseholdsController {
   @ApiResponse({ status: 201, description: 'Household created' })
   async create(@Body() dto: CreateHouseholdDto, @Req() req: any) {
     return this.householdsService.create(dto, req.user.id);
+  }
+
+  @Post('bulk')
+  @ApiOperation({ summary: 'Bulk create households' })
+  @ApiResponse({ status: 201, description: 'Households created' })
+  async createBulk(@Body() dtos: CreateHouseholdDto[], @Req() req: any) {
+    return this.householdsService.createBulk(dtos, req.user.id);
   }
 
   @Patch(':id')

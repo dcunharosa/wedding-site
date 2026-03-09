@@ -128,6 +128,13 @@ export async function createHousehold(data: {
   });
 }
 
+export async function createHouseholdsBulk(data: any[]) {
+  return fetchApi<any>('/admin/households/bulk', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
 export async function updateHousehold(id: string, data: {
   displayName?: string;
   notes?: string;

@@ -13,7 +13,7 @@ export class HouseholdsService {
   constructor(
     private prisma: PrismaService,
     private auditService: AuditService,
-  ) {}
+  ) { }
 
   /**
    * Generate a unique RSVP token and its hash
@@ -41,6 +41,7 @@ export class HouseholdsService {
                 { firstName: { contains: query.search, mode: 'insensitive' } },
                 { lastName: { contains: query.search, mode: 'insensitive' } },
                 { email: { contains: query.search, mode: 'insensitive' } },
+                { phone: { contains: query.search, mode: 'insensitive' } },
               ],
             },
           },
@@ -55,35 +56,43 @@ export class HouseholdsService {
       where.rsvpLastSubmittedAt = null;
     }
 
-    // Get total count
-    const total = await this.prisma.household.count({ where });
+    const page = Number(query.page) || 1;
+    const pageSize = Number(query.pageSize) || 20;
 
-    // Get paginated results
-    const skip = (query.page - 1) * query.pageSize;
-    const items = await this.prisma.household.findMany({
-      where,
-      skip,
-      take: query.pageSize,
-      include: {
-        guests: {
-          orderBy: [{ isPrimary: 'desc' }, { createdAt: 'asc' }],
-        },
-        _count: {
-          select: {
-            rsvpSubmissions: true,
+    try {
+      // Get total count
+      const total = await this.prisma.household.count({ where });
+
+      // Get paginated results
+      const skip = (page - 1) * pageSize;
+      const items = await this.prisma.household.findMany({
+        where,
+        skip,
+        take: pageSize,
+        include: {
+          guests: {
+            orderBy: [{ isPrimary: 'desc' }, { createdAt: 'asc' }],
+          },
+          _count: {
+            select: {
+              rsvpSubmissions: true,
+            },
           },
         },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+        orderBy: { createdAt: 'desc' },
+      });
 
-    return {
-      items,
-      total,
-      page: query.page,
-      pageSize: query.pageSize,
-      totalPages: Math.ceil(total / query.pageSize),
-    };
+      return {
+        items,
+        total,
+        page,
+        pageSize,
+        totalPages: Math.ceil(total / pageSize),
+      };
+    } catch (error) {
+      console.error('Error in HouseholdsService.findAll:', error);
+      throw error;
+    }
   }
 
   /**
@@ -165,6 +174,49 @@ export class HouseholdsService {
       ...household,
       rsvpToken: token, // Return the raw token once for admin to send in invite
     };
+  }
+
+  /**
+   * Create multiple households with guests in a transaction
+   */
+  async createBulk(dtos: CreateHouseholdDto[], adminId: string) {
+    const results = await this.prisma.$transaction(
+      dtos.map((dto) => {
+        const { hash } = this.generateRsvpToken();
+        return this.prisma.household.create({
+          data: {
+            displayName: dto.displayName,
+            rsvpTokenHash: hash,
+            notes: dto.notes || null,
+            guests: {
+              create: dto.guests.map((guest) => ({
+                firstName: guest.firstName,
+                lastName: guest.lastName,
+                email: guest.email || null,
+                phone: guest.phone || null,
+                isPrimary: guest.isPrimary || false,
+                isPlusOne: guest.isPlusOne || false,
+                attendanceRequiresGuestId: guest.attendanceRequiresGuestId || null,
+              })),
+            },
+          },
+        });
+      }),
+    );
+
+    // Audit log
+    await this.auditService.log({
+      actorType: 'ADMIN',
+      actorAdminId: adminId,
+      action: 'HOUSEHOLD_BULK_CREATED',
+      entityType: 'Household',
+      entityId: 'BULK',
+      metadata: {
+        count: dtos.length,
+      },
+    });
+
+    return { count: results.length };
   }
 
   /**
