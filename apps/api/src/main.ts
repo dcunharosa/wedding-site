@@ -50,6 +50,7 @@ async function bootstrap() {
 
   console.log(`🚀 API server running on port ${port}`);
   console.log(`📚 API docs available at http://localhost:${port}/api/docs`);
+  console.log(`🗄️ Database initialized with Prisma migrations`);
 }
 
 bootstrap();
