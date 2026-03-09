@@ -119,9 +119,9 @@ export default function AuditLogPage() {
               >
                 <option value="">All Actions</option>
                 <option value="ADMIN_LOGIN">Admin Login</option>
-                <option value="HOUSEHOLD_CREATED">Household Created</option>
-                <option value="HOUSEHOLD_UPDATED">Household Updated</option>
-                <option value="HOUSEHOLD_DELETED">Household Deleted</option>
+                <option value="HOUSEHOLD_CREATED">Guest Added</option>
+                <option value="HOUSEHOLD_UPDATED">Guest Updated</option>
+                <option value="HOUSEHOLD_DELETED">Guest Removed</option>
                 <option value="RSVP_SUBMITTED">RSVP Submitted</option>
                 <option value="CHANGE_REQUEST_CREATED">Change Request</option>
               </select>
@@ -182,7 +182,7 @@ export default function AuditLogPage() {
                         )}
                         {log.actorType === 'GUEST' && log.household && (
                           <span>
-                            Guest from <strong>{log.household.displayName}</strong>
+                            RSVP submitted by <strong>{log.household.displayName}</strong>
                           </span>
                         )}
                         {log.actorType === 'SYSTEM' && (

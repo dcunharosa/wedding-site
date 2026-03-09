@@ -46,7 +46,7 @@ const Icons = {
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Icons.dashboard },
-  { name: 'Households', href: '/dashboard/households', icon: Icons.households },
+  { name: 'Guests', href: '/dashboard/households', icon: Icons.households },
   { name: 'RSVP Tracking', href: '/dashboard/rsvp', icon: Icons.rsvp },
   { name: 'Audit Log', href: '/dashboard/audit', icon: Icons.audit },
 ];

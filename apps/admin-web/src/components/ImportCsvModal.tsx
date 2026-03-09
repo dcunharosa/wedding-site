@@ -140,7 +140,7 @@ export function ImportCsvModal({ onClose, onSuccess }: ImportCsvModalProps) {
                             <div>
                                 <p className="font-medium">{file.name}</p>
                                 <p className="text-xs text-muted-foreground">
-                                    {preview.length} households found
+                                    {preview.length} guests found
                                 </p>
                             </div>
                             <button
@@ -158,7 +158,7 @@ export function ImportCsvModal({ onClose, onSuccess }: ImportCsvModalProps) {
                             <table className="w-full text-sm">
                                 <thead className="bg-gray-50 border-b">
                                     <tr>
-                                        <th className="px-4 py-2 text-left">Household</th>
+                                        <th className="px-4 py-2 text-left">Guest</th>
                                         <th className="px-4 py-2 text-left">Guests</th>
                                     </tr>
                                 </thead>
@@ -175,7 +175,7 @@ export function ImportCsvModal({ onClose, onSuccess }: ImportCsvModalProps) {
                             </table>
                             {preview.length > 10 && (
                                 <div className="p-2 text-center bg-gray-50 text-xs text-muted-foreground border-t">
-                                    And {preview.length - 10} more households...
+                                    And {preview.length - 10} more guests...
                                 </div>
                             )}
                         </div>
@@ -193,7 +193,7 @@ export function ImportCsvModal({ onClose, onSuccess }: ImportCsvModalProps) {
                                 disabled={importing}
                                 className="btn-primary flex-1"
                             >
-                                {importing ? 'Importing...' : `Import ${preview.length} Households`}
+                                {importing ? 'Importing...' : `Import ${preview.length} Guests`}
                             </button>
                         </div>
                     </div>

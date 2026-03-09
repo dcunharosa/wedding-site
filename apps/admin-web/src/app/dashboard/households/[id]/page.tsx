@@ -12,6 +12,7 @@ interface Guest {
   email?: string;
   phone?: string;
   isPrimary: boolean;
+  isPlusOne?: boolean;
   attendanceRequiresGuestId?: string;
 }
 
@@ -45,7 +46,7 @@ export default function HouseholdDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [editing, setEditing] = useState(false);
-  const [editForm, setEditForm] = useState({ displayName: '', notes: '' });
+  const [editForm, setEditForm] = useState({ firstName: '', lastName: '', notes: '' });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -60,10 +61,15 @@ export default function HouseholdDetailPage() {
     try {
       const data = await getHousehold(id);
       setHousehold(data);
-      setEditForm({ displayName: data.displayName, notes: data.notes || '' });
+      const primaryGuest = data.guests.find((g: Guest) => g.isPrimary) ?? data.guests[0];
+      setEditForm({
+        firstName: primaryGuest?.firstName || '',
+        lastName: primaryGuest?.lastName || '',
+        notes: data.notes || '',
+      });
     } catch (err) {
-      console.error('Failed to load household:', err);
-      setError('Failed to load household details');
+      console.error('Failed to load guest:', err);
+      setError('Failed to load guest details');
     } finally {
       setLoading(false);
     }
@@ -72,19 +78,22 @@ export default function HouseholdDetailPage() {
   async function handleSave() {
     setSaving(true);
     try {
-      await updateHousehold(id, editForm);
+      const displayName = `${editForm.firstName.trim()} ${editForm.lastName.trim()}`;
+      await updateHousehold(id, { displayName, notes: editForm.notes });
       await loadHousehold();
       setEditing(false);
     } catch (err) {
-      console.error('Failed to update household:', err);
-      alert('Failed to update household');
+      console.error('Failed to update guest:', err);
+      alert('Failed to update guest');
     } finally {
       setSaving(false);
     }
   }
 
   async function handleDelete() {
-    if (!confirm(`Are you sure you want to delete "${household?.displayName}"? This cannot be undone.`)) {
+    const primaryGuest = household?.guests.find((g) => g.isPrimary) ?? household?.guests[0];
+    const name = primaryGuest ? `${primaryGuest.firstName} ${primaryGuest.lastName}` : household?.displayName;
+    if (!confirm(`Are you sure you want to remove ${name} from the guest list? This cannot be undone.`)) {
       return;
     }
 
@@ -92,8 +101,8 @@ export default function HouseholdDetailPage() {
       await deleteHousehold(id);
       router.push('/dashboard/households');
     } catch (err) {
-      console.error('Failed to delete household:', err);
-      alert('Failed to delete household');
+      console.error('Failed to delete guest:', err);
+      alert('Failed to delete guest');
     }
   }
 
@@ -111,7 +120,7 @@ export default function HouseholdDetailPage() {
     return (
       <DashboardLayout>
         <div className="text-center py-12">
-          <p className="text-destructive mb-4">{error || 'Household not found'}</p>
+          <p className="text-destructive mb-4">{error || 'Guest not found'}</p>
           <button onClick={() => router.back()} className="btn-secondary">
             Go Back
           </button>
@@ -119,6 +128,8 @@ export default function HouseholdDetailPage() {
       </DashboardLayout>
     );
   }
+
+  const primaryGuest = household.guests.find((g) => g.isPrimary) ?? household.guests[0];
 
   const getGuestResponse = (guestId: string) => {
     return household.latestSubmission?.responses?.find((r) => r.guestId === guestId);
@@ -137,22 +148,32 @@ export default function HouseholdDetailPage() {
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              Back to Households
+              Back to Guests
             </button>
             {editing ? (
-              <input
-                type="text"
-                value={editForm.displayName}
-                onChange={(e) => setEditForm({ ...editForm, displayName: e.target.value })}
-                className="input text-display-md font-serif"
-              />
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={editForm.firstName}
+                  onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
+                  className="input"
+                  placeholder="First name"
+                />
+                <input
+                  type="text"
+                  value={editForm.lastName}
+                  onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
+                  className="input"
+                  placeholder="Last name"
+                />
+              </div>
             ) : (
               <h1 className="text-display-lg font-serif font-light text-ink">
-                {household.displayName}
+                {primaryGuest ? `${primaryGuest.firstName} ${primaryGuest.lastName}` : household.displayName}
               </h1>
             )}
             <p className="text-driftwood mt-1">
-              Created {new Date(household.createdAt).toLocaleDateString()}
+              Added {new Date(household.createdAt).toLocaleDateString()}
             </p>
           </div>
           <div className="flex gap-2">
@@ -220,7 +241,7 @@ export default function HouseholdDetailPage() {
               onChange={(e) => setEditForm({ ...editForm, notes: e.target.value })}
               rows={3}
               className="input"
-              placeholder="Add notes about this household..."
+              placeholder="Add internal notes about this guest..."
             />
           ) : (
             <p className="text-driftwood">
@@ -232,7 +253,9 @@ export default function HouseholdDetailPage() {
         {/* Guests */}
         <div className="card">
           <div className="p-6 border-b border-sand">
-            <h2 className="text-lg font-serif">Guests ({household.guests.length})</h2>
+            <h2 className="text-lg font-serif">
+              {household.guests.length > 1 ? 'Guest & Plus One' : 'Guest'}
+            </h2>
           </div>
           <div className="divide-y divide-sand">
             {household.guests.map((guest) => {
@@ -245,8 +268,8 @@ export default function HouseholdDetailPage() {
                         <h3 className="font-medium text-ink">
                           {guest.firstName} {guest.lastName}
                         </h3>
-                        {guest.isPrimary && (
-                          <span className="badge-info text-xs">Primary</span>
+                        {guest.isPlusOne && (
+                          <span className="badge-neutral text-xs">Plus One</span>
                         )}
                         {response && (
                           <span className={response.attending ? 'badge-success' : 'badge-neutral'}>
