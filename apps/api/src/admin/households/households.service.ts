@@ -249,14 +249,49 @@ export class HouseholdsService {
   }
 
   /**
-   * Delete household (soft delete by adding to notes, or hard delete)
+   * Delete household — manually cascade child records because the schema
+   * has no onDelete: Cascade, so Postgres would reject the delete otherwise.
    */
   async remove(id: string, adminId: string) {
-    await this.prisma.household.delete({
-      where: { id },
+    await this.prisma.$transaction(async (tx) => {
+      // 1. Collect submission IDs so we can delete their children first
+      const submissions = await tx.rsvpSubmission.findMany({
+        where: { householdId: id },
+        select: { id: true },
+      });
+      const submissionIds = submissions.map((s) => s.id);
+
+      if (submissionIds.length > 0) {
+        // 2. Delete RSVP guest responses (FK → submission + guest)
+        await tx.rsvpGuestResponse.deleteMany({
+          where: { submissionId: { in: submissionIds } },
+        });
+        // 3. Delete RSVP household extras (FK → submission)
+        await tx.rsvpHouseholdExtras.deleteMany({
+          where: { submissionId: { in: submissionIds } },
+        });
+      }
+
+      // 4. Delete RSVP submissions
+      await tx.rsvpSubmission.deleteMany({ where: { householdId: id } });
+
+      // 5. Null out self-referential guest dependency before deleting guests
+      await tx.guest.updateMany({
+        where: { householdId: id },
+        data: { attendanceRequiresGuestId: null },
+      });
+
+      // 6. Delete guests
+      await tx.guest.deleteMany({ where: { householdId: id } });
+
+      // 7. Delete change requests (required FK, no cascade)
+      await tx.changeRequest.deleteMany({ where: { householdId: id } });
+
+      // 8. Delete the household itself (AuditLog.householdId is nullable → SetNull)
+      await tx.household.delete({ where: { id } });
     });
 
-    // Audit log
+    // Audit log recorded after the transaction succeeds
     await this.auditService.log({
       actorType: 'ADMIN',
       actorAdminId: adminId,
