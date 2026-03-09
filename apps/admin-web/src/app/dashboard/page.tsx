@@ -101,10 +101,10 @@ export default function DashboardPage() {
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard
-            title="Total Households"
+            title="Total Invited"
             value={stats?.totalHouseholds || 0}
             icon={Icons.households}
-            description="Invited households"
+            description="Invited guests"
           />
           <StatCard
             title="Total Guests"
@@ -133,7 +133,7 @@ export default function DashboardPage() {
         {/* Recent Households */}
         <div className="bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-gray-900">Recent Households</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Recent Guests</h3>
             <a href="/dashboard/households" className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1">
               View all {Icons.arrow}
             </a>
@@ -142,7 +142,7 @@ export default function DashboardPage() {
           <div className="space-y-3">
             {recentHouseholds.length === 0 ? (
               <p className="text-gray-500 text-center py-8">
-                No households yet. Create your first one to get started.
+                No guests yet. Add your first guest to get started.
               </p>
             ) : (
               recentHouseholds.map((household) => (
@@ -153,7 +153,7 @@ export default function DashboardPage() {
                   <div className="flex-1">
                     <h4 className="font-medium text-gray-900">{household.displayName}</h4>
                     <p className="text-sm text-gray-500">
-                      {household.guests.length} guest{household.guests.length !== 1 ? 's' : ''}
+                      {household.guests.some((g: any) => g.isPlusOne) ? '+ Plus One' : 'No Plus One'}
                     </p>
                   </div>
                   <div className="text-right">
@@ -183,7 +183,7 @@ export default function DashboardPage() {
                 className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-800 transition-colors"
               >
                 {Icons.plus}
-                Add New Household
+                Add Guest
               </a>
               <a
                 href="/dashboard/households?status=not_responded"

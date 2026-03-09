@@ -110,7 +110,7 @@ export default function RsvpTrackingPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="card p-4">
-            <p className="text-sm text-muted-foreground">Total Households</p>
+            <p className="text-sm text-muted-foreground">Total Invited</p>
             <p className="text-2xl font-bold">{stats.total}</p>
           </div>
           <div className="card p-4">
@@ -149,7 +149,7 @@ export default function RsvpTrackingPage() {
                 onChange={(e) => setFilter(e.target.value as typeof filter)}
                 className="input"
               >
-                <option value="all">All Households</option>
+                <option value="all">All Guests</option>
                 <option value="responded">Responded</option>
                 <option value="not_responded">Not Responded</option>
                 <option value="attending">Has Attending Guests</option>
@@ -163,7 +163,7 @@ export default function RsvpTrackingPage() {
         <div className="card">
           <div className="p-4 border-b">
             <p className="text-sm text-muted-foreground">
-              Showing {filteredHouseholds.length} of {households.length} households
+              Showing {filteredHouseholds.length} of {households.length} guests
             </p>
           </div>
 
@@ -173,7 +173,7 @@ export default function RsvpTrackingPage() {
             </div>
           ) : filteredHouseholds.length === 0 ? (
             <div className="p-12 text-center">
-              <p className="text-muted-foreground">No households match your filters</p>
+              <p className="text-muted-foreground">No guests match your filters</p>
             </div>
           ) : (
             <div className="divide-y">

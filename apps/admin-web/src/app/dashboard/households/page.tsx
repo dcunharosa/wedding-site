@@ -51,7 +51,7 @@ function HouseholdsPageInner() {
   }
 
   const handleDelete = async (id: string, name: string) => {
-    if (!confirm(`Are you sure you want to delete "${name}"? This cannot be undone.`)) {
+    if (!confirm(`Are you sure you want to remove ${name} from the guest list? This cannot be undone.`)) {
       return;
     }
 
@@ -122,7 +122,7 @@ function HouseholdsPageInner() {
         <div className="card">
           <div className="p-6 border-b">
             <p className="text-sm text-muted-foreground">
-              Showing {households.length} of {total} invitations
+              Showing {households.length} of {total} guests
             </p>
           </div>
 
@@ -136,51 +136,61 @@ function HouseholdsPageInner() {
             </div>
           ) : (
             <div className="divide-y">
-              {households.map((household) => (
-                <div
-                  key={household.id}
-                  className="p-6 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-lg mb-2">
-                        {household.displayName}
-                      </h3>
-                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
-                        <span>👥 {household.guests.length} guests</span>
-                        {household.rsvpLastSubmittedAt ? (
-                          <span className="text-green-600">
-                            ✅ Responded {new Date(household.rsvpLastSubmittedAt).toLocaleDateString()}
-                          </span>
-                        ) : (
-                          <span className="text-yellow-600">
-                            ⏳ No response yet
-                          </span>
+              {households.map((household) => {
+                const primaryGuest = household.guests.find((g: any) => g.isPrimary) ?? household.guests[0];
+                const hasPlusOne = household.guests.some((g: any) => g.isPlusOne);
+                return (
+                  <div
+                    key={household.id}
+                    className="p-6 hover:bg-gray-50 transition-colors"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="font-semibold text-lg">
+                            {primaryGuest ? `${primaryGuest.firstName} ${primaryGuest.lastName}` : household.displayName}
+                          </h3>
+                          {hasPlusOne && (
+                            <span className="px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-600 border border-gray-200">
+                              + Plus One
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                          {household.rsvpLastSubmittedAt ? (
+                            <span className="text-green-600">
+                              ✅ Responded {new Date(household.rsvpLastSubmittedAt).toLocaleDateString()}
+                            </span>
+                          ) : (
+                            <span className="text-yellow-600">
+                              ⏳ No response yet
+                            </span>
+                          )}
+                        </div>
+                        {household.notes && (
+                          <p className="text-sm text-muted-foreground mt-2">
+                            📝 {household.notes}
+                          </p>
                         )}
                       </div>
-                      {household.notes && (
-                        <p className="text-sm text-muted-foreground mt-2">
-                          📝 {household.notes}
-                        </p>
-                      )}
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => router.push(`/dashboard/households/${household.id}`)}
-                        className="btn-secondary text-sm"
-                      >
-                        View Details
-                      </button>
-                      <button
-                        onClick={() => handleDelete(household.id, household.displayName)}
-                        className="btn-destructive text-sm"
-                      >
-                        Delete
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => router.push(`/dashboard/households/${household.id}`)}
+                          className="btn-secondary text-sm"
+                        >
+                          View Details
+                        </button>
+                        <button
+                          onClick={() => handleDelete(household.id, primaryGuest ? `${primaryGuest.firstName} ${primaryGuest.lastName}` : household.displayName)}
+                          className="btn-destructive text-sm"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
