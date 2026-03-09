@@ -118,6 +118,7 @@ export async function createHousehold(data: {
     email?: string;
     phone?: string;
     isPrimary?: boolean;
+    isPlusOne?: boolean;
     attendanceRequiresGuestId?: string;
   }>;
 }) {

@@ -6,5 +6,6 @@ export * from './schemas/content';
 export * from './schemas/media';
 export * from './schemas/gift';
 export * from './schemas/audit';
+export * from './schemas/search';
 export * from './types';
 export * from './constants';

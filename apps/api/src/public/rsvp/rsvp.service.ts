@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { createHash } from 'crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ConfigService } from '../../config/config.service';
@@ -13,7 +14,8 @@ export class RsvpService {
     private configService: ConfigService,
     private auditService: AuditService,
     private emailService: EmailService,
-  ) {}
+    private jwtService: JwtService,
+  ) { }
 
   /**
    * Hash an RSVP token using SHA-256
@@ -31,13 +33,46 @@ export class RsvpService {
   }
 
   /**
+   * Search for a household by a guest's first and last name
+   */
+  async searchHousehold(dto: { firstName: string; lastName: string }): Promise<{ token: string }> {
+    const guest = await this.prisma.guest.findFirst({
+      where: {
+        firstName: { equals: dto.firstName, mode: 'insensitive' },
+        lastName: { equals: dto.lastName, mode: 'insensitive' },
+      },
+      select: { householdId: true },
+    });
+
+    if (!guest) {
+      throw new NotFoundException('Invitation not found.');
+    }
+
+    const jwtPlayload = { householdId: guest.householdId };
+    const jwtToken = this.jwtService.sign(jwtPlayload);
+    return { token: `search_${jwtToken}` };
+  }
+
+  /**
    * Validate token and get household
    */
   async validateToken(token: string) {
-    const tokenHash = this.hashToken(token);
+    let whereClause: any = {};
+
+    if (token.startsWith('search_')) {
+      const jwtToken = token.replace('search_', '');
+      try {
+        const payload = this.jwtService.verify(jwtToken);
+        whereClause = { id: payload.householdId };
+      } catch (err) {
+        throw new NotFoundException('Search session expired. Please search again.');
+      }
+    } else {
+      whereClause = { rsvpTokenHash: this.hashToken(token) };
+    }
 
     const household = await this.prisma.household.findUnique({
-      where: { rsvpTokenHash: tokenHash },
+      where: whereClause,
       include: {
         guests: {
           orderBy: [{ isPrimary: 'desc' }, { createdAt: 'asc' }],
@@ -78,12 +113,13 @@ export class RsvpService {
         lastName: guest.lastName,
         email: guest.email,
         isPrimary: guest.isPrimary,
+        isPlusOne: guest.isPlusOne,
         attendanceRequiresGuestId: guest.attendanceRequiresGuestId,
         currentResponse: response
           ? {
-              attending: response.attending,
-              dietaryRestrictions: response.dietaryRestrictions,
-            }
+            attending: response.attending,
+            dietaryRestrictions: response.dietaryRestrictions,
+          }
           : undefined,
       };
     });
@@ -97,9 +133,9 @@ export class RsvpService {
       guests,
       extras: latestSubmission?.extras
         ? {
-            songRequestText: latestSubmission.extras.songRequestText,
-            songRequestSpotifyUrl: latestSubmission.extras.songRequestSpotifyUrl,
-          }
+          songRequestText: latestSubmission.extras.songRequestText,
+          songRequestSpotifyUrl: latestSubmission.extras.songRequestSpotifyUrl,
+        }
         : undefined,
       canEdit: !deadlinePassed,
       deadlineInfo: {
@@ -186,6 +222,25 @@ export class RsvpService {
     const songRequestText = songRequestEnabled ? dto.songRequestText : null;
     const songRequestSpotifyUrl = songRequestEnabled ? dto.songRequestSpotifyUrl : null;
 
+    // Save custom names for Plus Ones
+    const updateGuestPromises = responses.map((r) => {
+      const guest = household.guests.find((g: any) => g.id === r.guestId);
+      if (guest && guest.isPlusOne && r.firstName && r.lastName) {
+        return this.prisma.guest.update({
+          where: { id: r.guestId },
+          data: {
+            firstName: r.firstName,
+            lastName: r.lastName,
+          },
+        });
+      }
+      return null;
+    }).filter(p => p !== null);
+
+    if (updateGuestPromises.length > 0) {
+      await Promise.all(updateGuestPromises);
+    }
+
     // Create RSVP submission
     const submission = await this.prisma.rsvpSubmission.create({
       data: {
@@ -203,11 +258,11 @@ export class RsvpService {
         extras:
           songRequestText || songRequestSpotifyUrl
             ? {
-                create: {
-                  songRequestText,
-                  songRequestSpotifyUrl,
-                },
-              }
+              create: {
+                songRequestText,
+                songRequestSpotifyUrl,
+              },
+            }
             : undefined,
       },
       include: {
@@ -256,7 +311,7 @@ export class RsvpService {
         songRequest: songRequestText ?? null,
         submittedAt: submission.submittedAt.toISOString(),
       })
-      .catch(() => {/* swallow — email failure must never break RSVP */});
+      .catch(() => {/* swallow — email failure must never break RSVP */ });
 
     return {
       ok: true,
@@ -302,7 +357,7 @@ export class RsvpService {
         householdName: household.displayName,
         message: dto.message,
       })
-      .catch(() => {/* swallow — email failure must never block the response */});
+      .catch(() => {/* swallow — email failure must never block the response */ });
 
     return { ok: true };
   }

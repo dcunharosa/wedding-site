@@ -1,24 +1,27 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import { RsvpForm } from '../../components/RsvpForm';
+import { RsvpSearch } from '../../components/RsvpSearch';
 import { getHouseholdRsvp } from '../../lib/api';
 
 export default function RsvpContent() {
   const searchParams = useSearchParams();
-  const token = searchParams.get('t');
+  const router = useRouter();
+  const initialToken = searchParams.get('t');
 
+  const [token, setToken] = useState<string | null>(initialToken);
   const [household, setHousehold] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!token) {
-      setError('No RSVP link provided. Please use the link from your invitation email.');
-      setLoading(false);
       return;
     }
+
+    setLoading(true);
 
     async function loadHousehold(rsvpToken: string) {
       try {
@@ -71,6 +74,22 @@ export default function RsvpContent() {
             <h2 className="text-2xl mb-4 text-red-900">Unable to Load RSVP</h2>
             <p className="text-red-700">{error}</p>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!household && !token) {
+    return (
+      <div className="min-h-[80vh] flex flex-col justify-center py-20">
+        <div className="container-custom max-w-md mx-auto">
+          <RsvpSearch
+            onSuccess={(newToken) => {
+              setToken(newToken);
+              // Update URL without full page reload
+              router.replace(`/rsvp?t=${newToken}`);
+            }}
+          />
         </div>
       </div>
     );

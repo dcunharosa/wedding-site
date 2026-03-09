@@ -9,6 +9,7 @@ interface Guest {
   lastName: string;
   email?: string | null;
   isPrimary: boolean;
+  isPlusOne?: boolean;
   attendanceRequiresGuestId?: string | null;
   currentResponse?: {
     attending: boolean;
@@ -37,7 +38,7 @@ interface RsvpFormProps {
 }
 
 export function RsvpForm({ household, token }: RsvpFormProps) {
-  const [responses, setResponses] = useState<Record<string, { attending: boolean; dietary: string }>>({});
+  const [responses, setResponses] = useState<Record<string, { attending: boolean; dietary: string; firstName: string; lastName: string }>>({});
   const [songRequest, setSongRequest] = useState('');
   const [spotifyUrl, setSpotifyUrl] = useState('');
   const [changeRequestMessage, setChangeRequestMessage] = useState('');
@@ -48,11 +49,13 @@ export function RsvpForm({ household, token }: RsvpFormProps) {
 
   // Initialize responses from current state
   useEffect(() => {
-    const initial: Record<string, { attending: boolean; dietary: string }> = {};
+    const initial: Record<string, { attending: boolean; dietary: string; firstName: string; lastName: string }> = {};
     household.guests.forEach((guest) => {
       initial[guest.id] = {
         attending: guest.currentResponse?.attending ?? false,
         dietary: guest.currentResponse?.dietaryRestrictions ?? '',
+        firstName: guest.firstName,
+        lastName: guest.lastName,
       };
     });
     setResponses(initial);
@@ -87,10 +90,12 @@ export function RsvpForm({ household, token }: RsvpFormProps) {
 
     try {
       const data = {
-        responses: Object.entries(responses).map(([guestId, { attending, dietary }]) => ({
+        responses: Object.entries(responses).map(([guestId, responseData]) => ({
           guestId,
-          attending,
-          dietaryRestrictions: dietary || null,
+          attending: responseData.attending,
+          dietaryRestrictions: responseData.dietary || null,
+          firstName: responseData.firstName,
+          lastName: responseData.lastName,
         })),
         songRequestText: songRequest || null,
         songRequestSpotifyUrl: spotifyUrl || null,
@@ -284,23 +289,67 @@ export function RsvpForm({ household, token }: RsvpFormProps) {
                 </div>
 
                 {responses[guest.id]?.attending && (
-                  <div className="mt-4">
-                    <label htmlFor={`dietary-${guest.id}`} className="block text-sm font-medium mb-2">
-                      Dietary Restrictions / Allergies (optional)
-                    </label>
-                    <input
-                      type="text"
-                      id={`dietary-${guest.id}`}
-                      value={responses[guest.id]?.dietary || ''}
-                      onChange={(e) =>
-                        setResponses({
-                          ...responses,
-                          [guest.id]: { ...responses[guest.id], dietary: e.target.value },
-                        })
-                      }
-                      className="w-full px-4 py-2 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
-                      placeholder="e.g., Vegetarian, Gluten-free, Nut allergy"
-                    />
+                  <div className="mt-4 space-y-4">
+                    {guest.isPlusOne && (
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label htmlFor={`firstName-${guest.id}`} className="block text-sm font-medium mb-1">
+                            Their First Name
+                          </label>
+                          <input
+                            type="text"
+                            id={`firstName-${guest.id}`}
+                            value={responses[guest.id]?.firstName || ''}
+                            onChange={(e) =>
+                              setResponses({
+                                ...responses,
+                                [guest.id]: { ...responses[guest.id], firstName: e.target.value },
+                              })
+                            }
+                            required
+                            className="w-full px-4 py-2 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                            placeholder="First Name"
+                          />
+                        </div>
+                        <div>
+                          <label htmlFor={`lastName-${guest.id}`} className="block text-sm font-medium mb-1">
+                            Their Last Name
+                          </label>
+                          <input
+                            type="text"
+                            id={`lastName-${guest.id}`}
+                            value={responses[guest.id]?.lastName || ''}
+                            onChange={(e) =>
+                              setResponses({
+                                ...responses,
+                                [guest.id]: { ...responses[guest.id], lastName: e.target.value },
+                              })
+                            }
+                            required
+                            className="w-full px-4 py-2 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                            placeholder="Last Name"
+                          />
+                        </div>
+                      </div>
+                    )}
+                    <div>
+                      <label htmlFor={`dietary-${guest.id}`} className="block text-sm font-medium mb-2">
+                        Dietary Restrictions / Allergies (optional)
+                      </label>
+                      <input
+                        type="text"
+                        id={`dietary-${guest.id}`}
+                        value={responses[guest.id]?.dietary || ''}
+                        onChange={(e) =>
+                          setResponses({
+                            ...responses,
+                            [guest.id]: { ...responses[guest.id], dietary: e.target.value },
+                          })
+                        }
+                        className="w-full px-4 py-2 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                        placeholder="e.g., Vegetarian, Gluten-free, Nut allergy"
+                      />
+                    </div>
                   </div>
                 )}
               </div>

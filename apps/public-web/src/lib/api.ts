@@ -115,3 +115,10 @@ export async function submitChangeRequest(token: string, message: string) {
     body: JSON.stringify({ message }),
   });
 }
+
+export async function searchRsvp(firstName: string, lastName: string) {
+  return fetchApi<{ token: string }>('/public/rsvp/search', {
+    method: 'POST',
+    body: JSON.stringify({ firstName, lastName }),
+  });
+}

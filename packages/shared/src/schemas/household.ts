@@ -11,6 +11,7 @@ export const createGuestSchema = z.object({
     .optional()
     .nullable(),
   isPrimary: z.boolean().optional().default(false),
+  isPlusOne: z.boolean().optional().default(false),
   attendanceRequiresGuestId: z.string().uuid().optional().nullable(),
 });
 

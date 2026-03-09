@@ -50,6 +50,7 @@ export interface GuestWithResponse {
   lastName: string;
   email?: string | null;
   isPrimary: boolean;
+  isPlusOne: boolean;
   attendanceRequiresGuestId?: string | null;
   currentResponse?: {
     attending: boolean;

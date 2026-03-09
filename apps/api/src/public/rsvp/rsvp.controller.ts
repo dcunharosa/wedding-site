@@ -2,13 +2,27 @@ import { Controller, Get, Post, Query, Body, Req } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import { RsvpService } from './rsvp.service';
-import { RsvpSubmitDto, ChangeRequestDto } from '@wedding/shared';
+import { RsvpSubmitDto, ChangeRequestDto, SearchRsvpDto } from '@wedding/shared';
 import { Request } from 'express';
+
+import { IsString, MinLength, MaxLength } from 'class-validator';
+
+export class SearchRsvpLocalDto {
+  @IsString()
+  @MinLength(1)
+  @MaxLength(100)
+  firstName!: string;
+
+  @IsString()
+  @MinLength(1)
+  @MaxLength(100)
+  lastName!: string;
+}
 
 @ApiTags('public')
 @Controller('public/rsvp')
 export class RsvpController {
-  constructor(private rsvpService: RsvpService) {}
+  constructor(private rsvpService: RsvpService) { }
 
   @Get('household')
   @Throttle({ default: { limit: 20, ttl: 60000 } }) // 20 requests per minute
@@ -18,6 +32,15 @@ export class RsvpController {
   @ApiResponse({ status: 404, description: 'Invalid token' })
   async getHousehold(@Query('t') token: string) {
     return this.rsvpService.getHouseholdData(token);
+  }
+
+  @Post('search')
+  @Throttle({ default: { limit: 10, ttl: 60000 } }) // 10 searches per minute
+  @ApiOperation({ summary: 'Search for RSVP by guest name' })
+  @ApiResponse({ status: 200, description: 'Search token returned' })
+  @ApiResponse({ status: 404, description: 'Guest not found' })
+  async search(@Body() dto: SearchRsvpLocalDto) {
+    return this.rsvpService.searchHousehold(dto);
   }
 
   @Post('submit')

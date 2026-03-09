@@ -5,6 +5,8 @@ export const rsvpGuestResponseSchema = z.object({
   guestId: z.string().uuid('Invalid guest ID'),
   attending: z.boolean(),
   dietaryRestrictions: z.string().max(500, 'Dietary restrictions too long').optional().nullable(),
+  firstName: z.string().max(100).optional().nullable(),
+  lastName: z.string().max(100).optional().nullable(),
 });
 
 export const rsvpSubmitSchema = z.object({

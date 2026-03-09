@@ -42,6 +42,7 @@ model Guest {
   email                     String?
   phone                     String?
   isPrimary                 Boolean             @default(false)
+  isPlusOne                 Boolean             @default(false)
   attendanceRequiresGuestId String?
   requiredGuest             Guest?              @relation("Dependency", fields: [attendanceRequiresGuestId], references: [id])
   dependentGuests           Guest[]             @relation("Dependency")

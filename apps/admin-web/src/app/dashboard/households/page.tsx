@@ -222,13 +222,13 @@ function CreateHouseholdModal({
 }) {
   const [displayName, setDisplayName] = useState('');
   const [notes, setNotes] = useState('');
-  const [guests, setGuests] = useState([{ firstName: '', lastName: '', email: '', phone: '', isPrimary: true }]);
+  const [guests, setGuests] = useState([{ firstName: '', lastName: '', email: '', phone: '', isPrimary: true, isPlusOne: false }]);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [createdToken, setCreatedToken] = useState('');
 
   const addGuest = () => {
-    setGuests([...guests, { firstName: '', lastName: '', email: '', phone: '', isPrimary: false }]);
+    setGuests([...guests, { firstName: '', lastName: '', email: '', phone: '', isPrimary: false, isPlusOne: false }]);
   };
 
   const updateGuest = (index: number, field: string, value: any) => {
@@ -256,6 +256,7 @@ function CreateHouseholdModal({
           email: g.email || undefined,
           phone: g.phone || undefined,
           isPrimary: g.isPrimary,
+          isPlusOne: g.isPlusOne,
         })),
       });
 
@@ -413,6 +414,18 @@ function CreateHouseholdModal({
                       className="input"
                       placeholder="Phone (optional)"
                     />
+                    <div className="md:col-span-2 flex items-center gap-2 mt-2">
+                      <input
+                        type="checkbox"
+                        id={`plus-one-${index}`}
+                        checked={guest.isPlusOne}
+                        onChange={(e) => updateGuest(index, 'isPlusOne', e.target.checked)}
+                        className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-primary"
+                      />
+                      <label htmlFor={`plus-one-${index}`} className="text-sm font-medium text-gray-700">
+                        Is an unnamed Plus One (guest will provide name on RSVP)
+                      </label>
+                    </div>
                   </div>
                 </div>
               ))}
