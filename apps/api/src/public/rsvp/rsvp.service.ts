@@ -35,11 +35,13 @@ export class RsvpService {
   /**
    * Search for a household by a guest's first and last name
    */
-  async searchHousehold(dto: { firstName: string; lastName: string }): Promise<{ token: string }> {
+  async searchHousehold(dto: { name: string }): Promise<{ token: string }> {
     const guest = await this.prisma.guest.findFirst({
       where: {
-        firstName: { equals: dto.firstName, mode: 'insensitive' },
-        lastName: { equals: dto.lastName, mode: 'insensitive' },
+        OR: [
+          { firstName: { equals: dto.name, mode: 'insensitive' } },
+          { lastName: { equals: dto.name, mode: 'insensitive' } },
+        ],
       },
       select: { householdId: true },
     });

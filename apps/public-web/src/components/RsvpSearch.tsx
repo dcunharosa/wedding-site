@@ -8,8 +8,7 @@ interface RsvpSearchProps {
 }
 
 export function RsvpSearch({ onSuccess }: RsvpSearchProps) {
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [name, setName] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -19,7 +18,7 @@ export function RsvpSearch({ onSuccess }: RsvpSearchProps) {
         setError(null);
 
         try {
-            const result = await searchRsvp(firstName.trim(), lastName.trim());
+            const result = await searchRsvp(name.trim());
             onSuccess(result.token);
         } catch (err: any) {
             console.error('RSVP search error:', err);
@@ -37,39 +36,23 @@ export function RsvpSearch({ onSuccess }: RsvpSearchProps) {
         <div className="bg-white rounded-lg p-8 shadow-sm">
             <h3 className="text-2xl mb-2 text-center">Find Your Invitation</h3>
             <p className="text-charcoal/70 text-center mb-8">
-                Please enter your name exactly as it appears on your invitation.
+                Please enter your name as it appears on your invitation.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid md:grid-cols-2 gap-4">
-                    <div>
-                        <label htmlFor="firstName" className="block text-sm font-medium mb-2">
-                            First Name
-                        </label>
-                        <input
-                            type="text"
-                            id="firstName"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="w-full px-4 py-3 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
-                            placeholder="e.g., Jane"
-                            required
-                        />
-                    </div>
-                    <div>
-                        <label htmlFor="lastName" className="block text-sm font-medium mb-2">
-                            Last Name
-                        </label>
-                        <input
-                            type="text"
-                            id="lastName"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className="w-full px-4 py-3 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
-                            placeholder="e.g., Doe"
-                            required
-                        />
-                    </div>
+                <div>
+                    <label htmlFor="name" className="block text-sm font-medium mb-2">
+                        First or Last Name
+                    </label>
+                    <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full px-4 py-3 border border-sage-200 rounded-lg focus:ring-2 focus:ring-sage-500 focus:border-transparent"
+                        placeholder="e.g., Jane or Doe"
+                        required
+                    />
                 </div>
 
                 {error && (
@@ -80,7 +63,7 @@ export function RsvpSearch({ onSuccess }: RsvpSearchProps) {
 
                 <button
                     type="submit"
-                    disabled={loading || !firstName.trim() || !lastName.trim()}
+                    disabled={loading || !name.trim()}
                     className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed text-lg py-4"
                 >
                     {loading ? 'Searching...' : 'Continue to RSVP'}
