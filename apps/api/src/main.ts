@@ -15,7 +15,7 @@ async function bootstrap() {
       process.env.ADMIN_WEB_URL || 'http://localhost:3002',
       // Production Vercel deployments (fallback if env vars not set in Railway)
       'https://fd-wedding-site.vercel.app',
-      'https://fd-wedding-admin.vercel.app',
+      'https://wedding-site-admin-web.vercel.app',
     ],
     credentials: true,
   });
