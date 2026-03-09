@@ -148,6 +148,7 @@ export class HouseholdsService {
             email: guest.email || null,
             phone: guest.phone || null,
             isPrimary: guest.isPrimary || false,
+            isPlusOne: guest.isPlusOne || false,
             attendanceRequiresGuestId: guest.attendanceRequiresGuestId || null,
           })),
         },
