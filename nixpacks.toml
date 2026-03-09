@@ -9,4 +9,4 @@ cmds = ["pnpm install --frozen-lockfile"]
 cmds = ["pnpm --filter @wedding/database generate", "pnpm --filter @wedding/api build"]
 
 [start]
-cmd = "sh scripts/start.sh"
+cmd = "node apps/api/dist/main.js"
